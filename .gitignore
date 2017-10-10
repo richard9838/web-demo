@@ -1,3 +1,4 @@
-.gitignore
 .idea/
 web-demo.iml
+src/main/resources/rebel.xml
+target/
