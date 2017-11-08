@@ -12,13 +12,14 @@ import java.util.List;
  *
  */
 @Service
-public class BookServiceImpl implements BookService{
+public class BookServiceImpl extends BaseServiceImpl implements BookService{
 
     @Autowired
     private BookDao bookDao;
 
     @Override
     public List<Book> listBooks() {
+        logger.info("books query................");
         return bookDao.queryAll(0, 10);
     }
 }

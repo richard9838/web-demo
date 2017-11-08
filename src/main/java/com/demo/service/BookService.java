@@ -7,7 +7,7 @@ import java.util.List;
 /**
  *
  */
-public interface BookService {
+public interface BookService extends BaseService{
 
     List<Book> listBooks();
 

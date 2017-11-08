@@ -10,7 +10,7 @@ import java.util.List;
  * 图书
  */
 @Repository
-public interface BookDao{
+public interface BookDao extends BaseDao{
 
     /**
      * 通过ID查询单本图书

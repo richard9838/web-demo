@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Param;
 /**
  * 预约图书记录
  */
-public interface AppointmentDao {
+public interface AppointmentDao extends BaseDao{
     /**
      * 插入预约图书记录
      *
