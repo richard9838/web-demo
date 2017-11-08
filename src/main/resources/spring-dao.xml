@@ -12,6 +12,15 @@
 
     <context:property-placeholder location="classpath:jdbc.properties"/>
 
+    <bean id="slf4J" class="com.alibaba.druid.support.logging.SLF4JImpl">
+        <constructor-arg>
+            <value>druid.statlog</value>
+        </constructor-arg>
+    </bean>
+
+    <bean id="statLogger" class="com.alibaba.druid.pool.DruidDataSourceStatLoggerImpl">
+        <property name="logger" ref="slf4J"/>
+    </bean>
 
     <bean id="druid-stat-interceptor"
           class="com.alibaba.druid.support.spring.stat.DruidStatInterceptor">
@@ -29,6 +38,27 @@
 
     <bean id="logFilter" class="com.alibaba.druid.filter.logging.Slf4jLogFilter">
         <property name="statementExecutableSqlLogEnable" value="true" />
+        <property name="resultSetLogEnabled" value="true" />
+        <property name="dataSourceLogEnabled" value="true" />
+        <property name="connectionLogEnabled" value="true" />
+    </bean>
+
+    <bean id="statFilter" class="com.alibaba.druid.filter.stat.StatFilter">
+        <property name="logSlowSql" value="true"/>
+        <property name="slowSqlMillis" value="1"/>
+        <property name="mergeSql" value="true"/>
+    </bean>
+
+    <bean id="wallConfig" class="com.alibaba.druid.wall.WallConfig">
+        <property name="dir" value="META-INF/druid/wall/mysql"/>
+        <property name="metadataAllow" value="false"/>
+        <property name="wrapAllow" value="false"/>
+        <!--<property name="selelctAllow" value="false"/>-->
+    </bean>
+
+    <bean id="wallFilter" class="com.alibaba.druid.wall.WallFilter">
+        <property name="dbType" value="mysql"/>
+        <property name="config" ref="wallConfig"/>
     </bean>
 
     <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
@@ -52,13 +82,18 @@
         <property name="poolPreparedStatements" value="true"/>
         <property name="defaultAutoCommit" value="true"/>
 
-        <property name="filters" value="mergeStat" />
+        <!--<property name="filters" value="mergeStat" />-->
         <property name="connectionProperties" value="druid.stat.slowSqlMillis=5000" />
         <property name="proxyFilters">
             <list>
                 <ref bean="logFilter"/>
+                <ref bean="statFilter"/>
+                <ref bean="wallFilter"/>
             </list>
         </property>
+
+        <property name="timeBetweenLogStatsMillis" value="60000"/>
+        <property name="statLogger" ref="statLogger"/>
     </bean>
 
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
