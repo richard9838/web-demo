@@ -10,18 +10,4 @@ public abstract class BaseController {
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-    public String query(String name) {
-        if ("a".equals(name)) {
-            return "a";
-        } else if ("b".equals(name)) {
-            return "b";
-        } else {
-            return query();
-        }
-    }
-
-    protected String query(){
-        return null;
-    }
-
 }
